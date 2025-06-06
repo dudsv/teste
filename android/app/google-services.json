@@ -1,0 +1,62 @@
+{
+  "project_info": {
+    "project_number": "664384526473",
+    "project_id": "fono-terapia",
+    "storage_bucket": "fono-terapia.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:664384526473:android:1ced78b5fe061ac4870e58",
+        "android_client_info": {
+          "package_name": "br.com.guigarcia42.fono_terapia"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "664384526473-2i3mp3nkmtg1tfljgj3sldtqmrnkmjf4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "br.com.guigarcia42.fono_terapia",
+            "certificate_hash": "c2c6c786a217892d643d704be2491f4b12aa8762"
+          }
+        },
+        {
+          "client_id": "664384526473-inm8s70pqc340dc844jdrd8l7ndkeprj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "br.com.guigarcia42.fono_terapia",
+            "certificate_hash": "09326728a68b32d5bd6d501ae79ff2f13f478cb8"
+          }
+        },
+        {
+          "client_id": "664384526473-kt3uat8vbqevdnoj456b7cckk88mbrlq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAzzVgi2dsZ1P71NXUxxKbhawZZp6WlWNg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "664384526473-kt3uat8vbqevdnoj456b7cckk88mbrlq.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "664384526473-ubjfoj39n87mlcl3pk667cgjlocasdsd.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "br.com.guigarcia42.fono-terapia"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
