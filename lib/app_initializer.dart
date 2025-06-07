@@ -9,6 +9,7 @@ import 'package:fono_terapia/database/app_database.dart';
 import 'package:fono_terapia/database/dao/category_dao.dart';
 import 'package:fono_terapia/database/firebase_database.dart';
 import 'package:fono_terapia/shared/utils/responsive_size.dart';
+import 'package:fono_terapia/shared/utils/logger.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 
@@ -33,60 +34,60 @@ class AppInitializer {
     await userDataStorage.clearUserData();
     activePurchases = [];
     purchasesRestored = false;
-    print("Logged out, cleared purchase state.");
+    logDebug("Logged out, cleared purchase state.");
   }
 
   static Future<void> initializeApp(BuildContext context) async {
     try {
-      print("[AppInitializer] Starting app initialization...");
+      logDebug("[AppInitializer] Starting app initialization...");
 
       // Initialize Firebase
-      print("[AppInitializer] Initializing Firebase...");
+      logDebug("[AppInitializer] Initializing Firebase...");
       await Firebase.initializeApp(
           // options: DefaultFirebaseOptions.currentPlatform,
           );
-      print("[AppInitializer] Firebase initialized successfully.");
+      logDebug("[AppInitializer] Firebase initialized successfully.");
 
       // Initialize database
-      print("[AppInitializer] Initializing local database...");
+      logDebug("[AppInitializer] Initializing local database...");
       database = await openOrInitializeDatabase();
-      print("[AppInitializer] Local database initialized successfully.");
+      logDebug("[AppInitializer] Local database initialized successfully.");
 
       // Initialize responsiveSize
-      print("[AppInitializer] Initializing responsiveSize...");
+      logDebug("[AppInitializer] Initializing responsiveSize...");
       responsiveSize = ResponsiveSize(mediaQueryData: MediaQuery.of(context));
-      print("[AppInitializer] responsiveSize initialized successfully.");
+      logDebug("[AppInitializer] responsiveSize initialized successfully.");
 
       // Initialize Auth and UserService
-      print(
+      logDebug(
           "[AppInitializer] Initializing authentication and user services...");
       authRepository = AuthRepository();
       userDataStorage = UserDataStorage();
       userService = UserService(userDataStorage);
-      print("[AppInitializer] Auth and UserService initialized successfully.");
+      logDebug("[AppInitializer] Auth and UserService initialized successfully.");
 
       // Initialize FirebaseDatabase
-      print("[AppInitializer] Initializing Firebase Database...");
+      logDebug("[AppInitializer] Initializing Firebase Database...");
       firebaseDatabase = FirebaseDatabase();
-      print("[AppInitializer] Firebase Database initialized successfully.");
+      logDebug("[AppInitializer] Firebase Database initialized successfully.");
 
       // Initialize DAOs
-      print("[AppInitializer] Initializing DAOs...");
+      logDebug("[AppInitializer] Initializing DAOs...");
       categoryDao = CategoryDao();
       gameResultRepository = GameResultRepository(
           firebaseDatabase: firebaseDatabase, db: database);
-      print("[AppInitializer] DAOs initialized successfully.");
+      logDebug("[AppInitializer] DAOs initialized successfully.");
 
-      print("[AppInitializer] App initialization completed successfully.");
+      logDebug("[AppInitializer] App initialization completed successfully.");
     } catch (e) {
-      print("[AppInitializer] Error during app initialization: $e");
+      logDebug("[AppInitializer] Error during app initialization: $e");
       rethrow;
     }
   }
 
   // New function that initializes the in-app purchase services and validation logic
   static Future<void> initializePurchaseServices() async {
-    print("INITIALIZING PURCHASE SERVICES");
+    logDebug("INITIALIZING PURCHASE SERVICES");
     // Initialize InAppPurchase instance and listener
     inAppPurchase = InAppPurchase.instance;
 
@@ -101,31 +102,31 @@ class AppInitializer {
   }
 
   static void _initializePurchaseListener() {
-    print('Initializing global purchase listener');
+    logDebug('Initializing global purchase listener');
     final Stream<List<PurchaseDetails>> purchaseUpdated =
         inAppPurchase.purchaseStream;
 
-    print('Attaching global listener to purchaseStream...');
+    logDebug('Attaching global listener to purchaseStream...');
     purchaseUpdated.listen((List<PurchaseDetails> purchaseDetailsList) {
-      print(
+      logDebug(
           'Global purchase update received, length: ${purchaseDetailsList.length}');
       activePurchases =
           purchaseDetailsList; // Store the received purchases globally
     }, onError: (error) {
-      print("Error in global purchase stream: $error");
+      logDebug("Error in global purchase stream: $error");
     });
   }
 
   static Future<void> _restorePurchases() async {
-    print("Restoring previous purchases...");
+    logDebug("Restoring previous purchases...");
     purchasesRestored = false; // Reset flag
 
     try {
       await inAppPurchase.restorePurchases();
-      print("Purchases restored successfully");
+      logDebug("Purchases restored successfully");
       purchasesRestored = true; // Mark as restored
     } catch (e) {
-      print("Error restoring purchases: $e");
+      logDebug("Error restoring purchases: $e");
       purchasesRestored =
           true; // Mark as done, even on failure to avoid blocking
     }
@@ -133,11 +134,11 @@ class AppInitializer {
 
   // Add a function to validate the subscription
   static Future<void> _validateSubscription() async {
-    print("Validating subscription status at startup...");
+    logDebug("Validating subscription status at startup...");
 
     // Wait until `activePurchases` is populated
     if (activePurchases.isEmpty) {
-      print("Waiting for global purchase data...");
+      logDebug("Waiting for global purchase data...");
       await Future.delayed(Duration(seconds: 2));
     }
 
@@ -158,16 +159,16 @@ class AppInitializer {
     }
 
     if (!subscriptionIsActive) {
-      print("Subscription is not active.");
+      logDebug("Subscription is not active.");
     } else {
-      print("Subscription is active.");
+      logDebug("Subscription is active.");
     }
   }
 
   // Verify subscription with the store (App Store/Play Store)
   static Future<bool> _verifySubscription(
       PurchaseDetails purchaseDetails) async {
-    print("Verifying subscription for product: ${purchaseDetails.productID}");
+    logDebug("Verifying subscription for product: ${purchaseDetails.productID}");
 
     // Add any additional logic for verifying receipt if needed here
     return purchaseDetails.status == PurchaseStatus.purchased ||
@@ -190,7 +191,7 @@ class AppInitializer {
             .update({
           'isPremium': isPremium,
         });
-        print('Subscription status updated in Firestore: $isPremium');
+        logDebug('Subscription status updated in Firestore: $isPremium');
       }
     }
   }

@@ -4,6 +4,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'dart:convert';
 import 'dart:math';
+import 'package:fono_terapia/shared/utils/logger.dart';
 
 class AuthRepository {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -31,7 +32,7 @@ class AuthRepository {
         return userCredential.user;
       }
     } catch (e) {
-      print("Google Sign-In Error: $e");
+      logDebug("Google Sign-In Error: $e");
     }
     return null;
   }
@@ -39,12 +40,12 @@ class AuthRepository {
   // Sign in with Apple
   Future<User?> signInWithApple() async {
     try {
-      print("Starting Apple Sign-In process...");
+      logDebug("Starting Apple Sign-In process...");
 
       // Generate nonce and hash
       final rawNonce = generateNonce();
       final nonceHash = sha256ofString(rawNonce);
-      print("Nonce generated and hashed.");
+      logDebug("Nonce generated and hashed.");
 
       // Get Apple credential
       final appleCredential = await SignInWithApple.getAppleIDCredential(
@@ -55,12 +56,12 @@ class AuthRepository {
         nonce: nonceHash,
       );
 
-      print("AppleIDCredential received:");
-      print("  Email: ${appleCredential.email}");
-      print(
+      logDebug("AppleIDCredential received:");
+      logDebug("  Email: ${appleCredential.email}");
+      logDebug(
           "  Full Name: ${appleCredential.givenName} ${appleCredential.familyName}");
-      print("  Identity Token: ${appleCredential.identityToken}");
-      print("  User ID: ${appleCredential.userIdentifier}");
+      logDebug("  Identity Token: ${appleCredential.identityToken}");
+      logDebug("  User ID: ${appleCredential.userIdentifier}");
 
       // Check if the identity token is null
       if (appleCredential.identityToken == null) {
@@ -74,23 +75,23 @@ class AuthRepository {
         rawNonce: rawNonce,
       );
 
-      print("OAuthCredential created, attempting Firebase sign-in...");
+      logDebug("OAuthCredential created, attempting Firebase sign-in...");
 
       // Sign in with the generated credential
       final UserCredential userCredential =
           await _auth.signInWithCredential(oauthCredential);
 
       if (userCredential.user != null) {
-        print("Firebase sign-in successful. User: ${userCredential.user!.uid}");
-        print("User email: ${userCredential.user!.email}");
+        logDebug("Firebase sign-in successful. User: ${userCredential.user!.uid}");
+        logDebug("User email: ${userCredential.user!.email}");
       } else {
-        print("Firebase sign-in returned no user.");
+        logDebug("Firebase sign-in returned no user.");
       }
 
       return userCredential.user;
     } catch (e, stackTrace) {
-      print("Apple Sign-In Error: $e");
-      print("Stack Trace: $stackTrace");
+      logDebug("Apple Sign-In Error: $e");
+      logDebug("Stack Trace: $stackTrace");
       return null;
     }
   }
