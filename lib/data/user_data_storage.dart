@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:fono_terapia/shared/model/user_data.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:fono_terapia/shared/utils/logger.dart';
 
 class UserDataStorage {
   static const String _userDataKey = 'user_data';
@@ -10,7 +11,7 @@ class UserDataStorage {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String jsonString = jsonEncode(userData.toJson());
     await prefs.setString(_userDataKey, jsonString);
-    print('UserData saved: $jsonString'); // Debugging log
+    logDebug('UserData saved: $jsonString');
   }
 
   // Load UserData from SharedPreferences
@@ -19,12 +20,12 @@ class UserDataStorage {
     String? jsonString = prefs.getString(_userDataKey);
 
     if (jsonString == null) {
-      print('No UserData found in SharedPreferences'); // Debugging log
+      logDebug('No UserData found in SharedPreferences');
       return null;
     }
 
     Map<String, dynamic> jsonMap = jsonDecode(jsonString);
-    print('UserData loaded: $jsonString'); // Debugging log
+    logDebug('UserData loaded: $jsonString');
     return UserData.fromJson(jsonMap);
   }
 
@@ -39,9 +40,9 @@ class UserDataStorage {
       userData.isPremium = isPremium;
 
       await saveUserData(userData);  // Reuse saveUserData to update the SharedPreferences
-      print('Premium status updated: $isPremium'); // Debugging log
+      logDebug('Premium status updated: $isPremium');
     } else {
-      print('No UserData found to update premium status'); // Debugging log
+      logDebug('No UserData found to update premium status');
     }
   }
 
@@ -49,6 +50,6 @@ class UserDataStorage {
   Future<void> clearUserData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove(_userDataKey);
-    print('UserData cleared from SharedPreferences'); // Debugging log
+    logDebug('UserData cleared from SharedPreferences');
   }
 }
