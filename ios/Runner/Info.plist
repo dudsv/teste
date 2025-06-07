@@ -59,5 +59,12 @@
     	</dict>
     </array>
     <!-- End of the Google Sign-in Section -->
+    <key>NSAppTransportSecurity</key>
+    <dict>
+        <key>NSAllowsArbitraryLoads</key>
+        <false/>
+        <!-- If the app requires HTTP access to specific domains, list them under
+             NSExceptionDomains. -->
+    </dict>
 </dict>
 </plist>
