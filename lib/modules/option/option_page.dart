@@ -38,7 +38,7 @@ class OptionPage extends StatelessWidget {
                   future: viewModel.findAllSubCategories(category.id),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Center(child: CircularProgressIndicator());
+                      return const Center(child: CircularProgressIndicator());
                     } else if (snapshot.hasError) {
                       return Center(
                           child: MyText('Erro ao carregar dados: ${snapshot.error}'));

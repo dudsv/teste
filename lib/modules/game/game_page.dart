@@ -54,7 +54,7 @@ class _GamePageState extends State<GamePage> {
           }
 
           if (viewModel.isLoading) {
-            return Scaffold(
+            return const Scaffold(
               body: Center(child: CircularProgressIndicator()),
             );
           }
@@ -74,7 +74,7 @@ class _GamePageState extends State<GamePage> {
                 _buildTopBar(context, viewModel, responsiveSize),
                 Expanded(
                   child: viewModel.isLoading
-                      ? Center(child: CircularProgressIndicator())
+                      ? const Center(child: CircularProgressIndicator())
                       : Padding(
                     padding: EdgeInsets.only(
                       top: responsiveSize.scaleSize(30),

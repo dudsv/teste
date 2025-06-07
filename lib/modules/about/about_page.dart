@@ -32,7 +32,7 @@ class AboutPage extends StatelessWidget {
               child: Center(
                 child: SizedBox(
                   height: responsiveSize.scaleSize(200),
-                  child: Image.asset(
+                  child: const Image.asset(
                     AppAssets.logoSobre,
                     fit: BoxFit.fill,
                   ),

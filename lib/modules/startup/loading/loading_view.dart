@@ -56,8 +56,8 @@ class _LoadingViewState extends State<LoadingView> {
   Widget loadingImages() {
     return Stack(
       children: [
-        Center(child: Image.asset(AppAssets.union)),
-        Center(child: Image.asset(AppAssets.logoFull)),
+        const Center(child: Image.asset(AppAssets.union)),
+        const Center(child: Image.asset(AppAssets.logoFull)),
       ],
     );
   }
